@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
     //开始动画
     private void palyAnim() {
         circleVIew.scrollTo(0,0);
+        circle_layout.scrollTo(0,0);
         moveValue = 0;
         circleVIew.startProgress();
         mHandler.sendEmptyMessage(RESTART_ANIMATION);
