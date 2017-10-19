@@ -16,6 +16,7 @@
         android:layout_marginTop="50dp"/>
 
     <RelativeLayout
+        android:id="@+id/circle_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/circleView1"

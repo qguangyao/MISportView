@@ -44,13 +44,16 @@ public class CircleVIew extends View {
     private int mRadius;
     private int mSteps;//步数
     private int mAngle;//步数进度条角度
-    private int mIncreament = 52;//外面大圈相对于里面虚线圈半径大了多少
+    private  int mIncreament = 52;//外面大圈相对于里面虚线圈半径大了多少
+    private  int mMaxIncreament = 88;//放大的最大值
     private int mLargeRadius;//大圆半径
     private Matrix matrix;
     private float rotate;
     private int count;//计数器,用于绘制大圆放大缩小
     private ArrayList<Ball> ballSet = new ArrayList<Ball>();
     private boolean success = false;
+    private onScaleListener onScaleListener;
+    int  span = 2;
 
     public CircleVIew(Context context) {
         this(context, null);
@@ -147,10 +150,9 @@ public class CircleVIew extends View {
         }
         mLargeCirclePaint.setShadowLayer(10, 0, 0, Color.WHITE);
         mLargeCirclePaint.setShader(shader);
-        int span = 3;
         if (count == 0) {
             mIncreament += span;
-            if (mIncreament >= 88) {
+            if (mIncreament >= mMaxIncreament) {
                 count = 1;
             }
         } else if (count == 1) {
@@ -159,6 +161,9 @@ public class CircleVIew extends View {
                 mIncreament = 52;
                 count = 2;
             }
+        }
+        if (onScaleListener != null ){
+            onScaleListener.onScale(mIncreament-52,mMaxIncreament - 52,count);
         }
         mLargeRadius = mRadius + mIncreament;
         //为大圆发亮部分加上阴影
@@ -262,6 +267,16 @@ public class CircleVIew extends View {
             x += speedX;
         }
     }
+
+    public interface onScaleListener {
+        /**
+         * 大圈放大时调用
+         * @param changeValue 当前半径变化量
+         * @param max 半径最大变化量
+         * @param count 缩放阶段
+         */
+        void onScale(int changeValue,int max,int count);
+    }
     //对外部分==============================================
 
     /**
@@ -300,5 +315,15 @@ public class CircleVIew extends View {
         }
         mEndPointX = (int) (mCenterX + Math.sin(mAngle * Math.PI / 180) * mRadius);
         mEndPointY = (int) (mCenterY - Math.cos(mAngle * Math.PI / 180) * mRadius);
+    }
+    /**
+     * 设置onScaleListener
+     */
+    public void setOnScaleListener(onScaleListener onScaleListener){
+        this.onScaleListener = onScaleListener;
+    }
+
+    public int getSpan(){
+        return span;
     }
 }
